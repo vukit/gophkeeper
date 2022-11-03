@@ -1,0 +1,384 @@
+basePath: /api
+definitions:
+  model.Card:
+    properties:
+      bank:
+        type: string
+      cvv:
+        type: string
+      date:
+        type: string
+      id:
+        type: integer
+      metainfo:
+        type: string
+      number:
+        type: string
+    type: object
+  model.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  model.File:
+    properties:
+      id:
+        type: integer
+      metainfo:
+        type: string
+      name:
+        type: string
+      path:
+        type: string
+    type: object
+  model.Login:
+    properties:
+      id:
+        type: integer
+      metainfo:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  model.User:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact:
+    name: Mark Vaisman
+  license:
+    name: MIT
+    url: https://github.com/vukit/gophkeeper/blob/main/LICENSE
+  title: GophKeeper API
+  version: "1.0"
+paths:
+  /cards:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Card'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Возвращает данные банковских карт пользователя
+      tags:
+      - Cards
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: данные банковской карты
+        in: body
+        name: value
+        required: true
+        schema:
+          $ref: '#/definitions/model.Card'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Cохраняет данные банковской карты пользователя
+      tags:
+      - Cards
+  /cards/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: id банковской карты
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Удаляет данные банковской карты пользователя
+      tags:
+      - Cards
+  /files:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.File'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Возвращает данные файлов пользователя
+      tags:
+      - Files
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: id файла
+        in: formData
+        name: id
+        required: true
+        type: integer
+      - description: metainfo файла
+        in: formData
+        name: metainfo
+        required: true
+        type: string
+      - description: содержимое файла
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Cохраняет данные файла пользователя
+      tags:
+      - Files
+  /files/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: id файла
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Удаляет данные файла пользователя
+      tags:
+      - Files
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: id файла
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/octet-stream
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Выгружает файл пользователю
+      tags:
+      - Files
+  /logins:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Login'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Возвращает данные логинов пользователя
+      tags:
+      - Logins
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: данные логина
+        in: body
+        name: value
+        required: true
+        schema:
+          $ref: '#/definitions/model.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Cохраняет данные логина пользователя
+      tags:
+      - Logins
+  /logins/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: id логина
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Удаляет данные логина пользователя
+      tags:
+      - Logins
+  /signin:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: данные пользователя
+        in: body
+        name: value
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Аутентификация пользователя
+      tags:
+      - User
+  /signup:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: данные пользователя
+        in: body
+        name: value
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "406":
+          description: Not Acceptable
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Регистрация пользователя
+      tags:
+      - User
+swagger: "2.0"
